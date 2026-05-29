@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Super Ulvne Bros — Video Game Music Composer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #0a0a0a;
+      color: #e8e8e8;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .halftone-bg {
+      background-image: radial-gradient(circle, #333 1px, transparent 1px);
+      background-size: 18px 18px;
+      opacity: 0.15;
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    /* NAV */
+    nav {
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 48px;
+      border-bottom: 1px solid #1a1a1a;
+      background: #0a0a0a;
+      z-index: 10;
+    }
+
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      letter-spacing: 3px;
+      color: #fff;
+    }
+
+    .nav-logo span { color: #00FF41; }
+
+    .nav-links {
+      display: flex;
+      gap: 36px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 2px;
+      color: #555;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: #00FF41; }
+
+    /* HERO */
+    .hero {
+      position: relative;
+      overflow: hidden;
+      border-bottom: 1px solid #1a1a1a;
+    }
+
+    .hero-video-wrap {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 48px 48px 24px;
+    }
+
+    .video-frame {
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: #111;
+      border: 1px solid #1e1e1e;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .video-frame iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+
+    .video-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    .play-btn {
+      width: 64px;
+      height: 64px;
+      border: 2px solid #00FF41;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .play-btn svg { fill: #00FF41; }
+
+    .video-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 3px;
+      color: #333;
+      text-transform: uppercase;
+    }
+
+    .corner { position: absolute; width: 20px; height: 20px; }
+    .corner-tl { top: 0; left: 0; border-top: 2px solid #00FF41; border-left: 2px solid #00FF41; }
+    .corner-tr { top: 0; right: 0; border-top: 2px solid #00FF41; border-right: 2px solid #00FF41; }
+    .corner-bl { bottom: 0; left: 0; border-bottom: 2px solid #00FF41; border-left: 2px solid #00FF41; }
+    .corner-br { bottom: 0; right: 0; border-bottom: 2px solid #00FF41; border-right: 2px solid #00FF41; }
+
+    .hero-title-block {
+      text-align: center;
+      padding: 20px 48px 48px;
+    }
+
+    .hero-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 56px;
+      letter-spacing: 8px;
+      color: #fff;
+      line-height: 1;
+    }
+
+    .hero-name span { color: #00FF41; }
+
+    .hero-sub {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 4px;
+      color: #444;
+      text-transform: uppercase;
+      margin-top: 12px;
+    }
+
+    /* SECTIONS */
+    .section {
+      padding: 64px 48px;
+      max-width: 900px;
+      margin: 0 auto;
+      border-bottom: 1px solid #111;
+    }
+
+    .section-tag {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 4px;
+      color: #00FF41;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 38px;
+      letter-spacing: 3px;
+      color: #fff;
+      margin-bottom: 36px;
+    }
+
+    /* GODSLAYER BANNER */
+    .gs-banner {
+      position: relative;
+      border: 1px solid #1e1e1e;
+      background: #0d0d0d;
+      padding: 32px;
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      overflow: hidden;
+    }
+
+    .gs-badge {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: #00FF41;
+      border: 1px solid #00FF41;
+      padding: 6px 12px;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .gs-text h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      letter-spacing: 3px;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .gs-text p {
+      font-size: 13px;
+      color: #555;
+      line-height: 1.7;
+    }
+
+    /* PORTFOLIO GRID */
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .portfolio-card {
+      background: #0d0d0d;
+      border: 1px solid #1a1a1a;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+
+    .portfolio-card:hover { border-color: #00FF41; }
+
+    .card-thumb {
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: #111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card-halftone {
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(circle, #1e1e1e 1px, transparent 1px);
+      background-size: 8px 8px;
+    }
+
+    .card-icon {
+      position: relative;
+      z-index: 2;
+      width: 36px;
+      height: 36px;
+      border: 1px solid #2a2a2a;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card-icon svg { fill: #444; width: 16px; height: 16px; }
+
+    .card-info { padding: 14px; }
+
+    .card-game {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 17px;
+      letter-spacing: 2px;
+      color: #ccc;
+    }
+
+    .card-meta {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px;
+      color: #3a3a3a;
+      letter-spacing: 1px;
+      margin-top: 4px;
+    }
+
+    /* ABOUT — CHRISTIAN */
+    .profile-main {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 40px;
+      align-items: start;
+      margin-bottom: 56px;
+    }
+
+    .avatar-frame {
+      width: 180px;
+      height: 180px;
+      border: 1px solid #1e1e1e;
+      background: #111;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .avatar-halftone {
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(circle, #222 1.5px, transparent 1.5px);
+      background-size: 10px 10px;
+    }
+
+    .avatar-initials {
+      position: relative;
+      z-index: 2;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 52px;
+      letter-spacing: 4px;
+      color: #fff;
+    }
+
+    .avatar-corner { position: absolute; width: 14px; height: 14px; z-index: 3; }
+    .act { top: 0; left: 0; border-top: 2px solid #00FF41; border-left: 2px solid #00FF41; }
+    .acb { bottom: 0; right: 0; border-bottom: 2px solid #00FF41; border-right: 2px solid #00FF41; }
+
+    .availability-dot {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #00FF41;
+    }
+
+    .dot-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: #00FF41;
+      text-transform: uppercase;
+    }
+
+    .profile-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 42px;
+      letter-spacing: 4px;
+      color: #fff;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .profile-role {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 3px;
+      color: #444;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .profile-bio {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.85;
+    }
+
+    .profile-bio p + p { margin-top: 14px; }
+    .profile-bio strong { color: #aaa; font-weight: 500; }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      margin-top: 24px;
+      background: #1a1a1a;
+      border: 1px solid #1a1a1a;
+    }
+
+    .stat-cell { background: #0d0d0d; padding: 14px 16px; }
+
+    .stat-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: #333;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .stat-value {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 18px;
+      letter-spacing: 2px;
+      color: #bbb;
+    }
+
+    .stat-value.green { color: #00FF41; }
+
+    /* PROFILE DIVIDER */
+    .profile-divider {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 48px 40px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .divider-line-h { flex: 1; height: 1px; background: #1a1a1a; }
+
+    .divider-tag {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: #2a2a2a;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    /* MARCUS */
+    .profile-secondary {
+      display: grid;
+      grid-template-columns: 1fr 120px;
+      gap: 40px;
+      align-items: start;
+    }
+
+    .secondary-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      letter-spacing: 3px;
+      color: #aaa;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .secondary-role {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: #333;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .secondary-bio {
+      font-size: 13px;
+      color: #4a4a4a;
+      line-height: 1.8;
+    }
+
+    .secondary-bio strong { color: #777; font-weight: 500; }
+
+    .secondary-avatar {
+      width: 120px;
+      height: 120px;
+      border: 1px solid #1a1a1a;
+      background: #0d0d0d;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .secondary-avatar-ht {
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(circle, #1a1a1a 1px, transparent 1px);
+      background-size: 8px 8px;
+    }
+
+    .secondary-initials {
+      position: relative;
+      z-index: 2;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 32px;
+      letter-spacing: 3px;
+      color: #333;
+    }
+
+    .tag-pill {
+      display: inline-block;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: #2a2a2a;
+      border: 1px solid #1e1e1e;
+      padding: 4px 10px;
+      text-transform: uppercase;
+      margin-right: 8px;
+      margin-top: 14px;
+    }
+
+    .tag-pill.green { color: #00FF41; border-color: #00FF41; }
+
+    /* CONTACT */
+    .contact-bar {
+      padding: 56px 48px;
+      text-align: center;
+      background: #0d0d0d;
+      border-top: 1px solid #1a1a1a;
+    }
+
+    .contact-line {
+      width: 40px;
+      height: 2px;
+      background: #00FF41;
+      margin: 0 auto 20px;
+    }
+
+    .contact-cta {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 32px;
+      letter-spacing: 5px;
+      color: #fff;
+      margin-bottom: 20px;
+    }
+
+    .contact-btn {
+      display: inline-block;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 3px;
+      color: #00FF41;
+      border: 1px solid #00FF41;
+      padding: 14px 36px;
+      text-decoration: none;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .contact-btn:hover { background: rgba(0,255,65,0.07); }
+
+    footer {
+      padding: 20px 48px;
+      text-align: center;
+      border-top: 1px solid #111;
+    }
+
+    footer p {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: #222;
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">SUPER <span>ULVNE</span> BROS</div>
+    <ul class="nav-links">
+      <li><a href="#work">Work</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <div style="position:relative; overflow:hidden;">
+    <div class="halftone-bg"></div>
+    <div class="hero-video-wrap">
+      <div class="video-frame" id="videoFrame">
+        <div class="corner corner-tl"></div>
+        <div class="corner corner-tr"></div>
+        <div class="corner corner-bl"></div>
+        <div class="corner corner-br"></div>
+        <!-- PASTE YOUR YOUTUBE EMBED URL BELOW TO REPLACE THE PLACEHOLDER -->
+        <!-- Example: <iframe src="https://www.youtube.com/embed/YOUR_VIDEO_ID" allowfullscreen></iframe> -->
+        <div class="video-placeholder">
+          <div class="play-btn">
+            <svg viewBox="0 0 24 24" width="22" height="22"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+          <div class="video-label">[ Gameplay video — coming soon ]</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-title-block">
+      <div class="hero-name">SUPER <span>ULVNE</span> BROS</div>
+      <div class="hero-sub">Video Game Music Composer &nbsp;|&nbsp; Sweden</div>
+    </div>
+  </div>
+
+  <!-- GODSLAYER FEATURED -->
+  <div class="section" id="work">
+    <div class="section-tag">// featured project</div>
+    <div class="section-title">GODSLAYER</div>
+    <div class="gs-banner">
+      <div class="halftone-bg" style="opacity:0.06"></div>
+      <span class="gs-badge">Current Project</span>
+      <div class="gs-text">
+        <h3>GODSLAYER — Original Soundtrack</h3>
+        <p>Composing the full original soundtrack for Godslayer, a black &amp; white action manga series. Dark, cinematic, and heavy — built to match blade-and-machine combat.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PORTFOLIO -->
+  <div class="section">
+    <div class="section-tag">// portfolio</div>
+    <div class="section-title">SELECTED WORKS</div>
+    <div class="portfolio-grid">
+      <div class="portfolio-card">
+        <div class="card-thumb">
+          <div class="card-halftone"></div>
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z"/></svg>
+          </div>
+        </div>
+        <div class="card-info">
+          <div class="card-game">Project Title</div>
+          <div class="card-meta">Action RPG &nbsp;·&nbsp; 2024</div>
+        </div>
+      </div>
+      <div class="portfolio-card">
+        <div class="card-thumb">
+          <div class="card-halftone"></div>
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z"/></svg>
+          </div>
+        </div>
+        <div class="card-info">
+          <div class="card-game">Project Title</div>
+          <div class="card-meta">Platformer &nbsp;·&nbsp; 2024</div>
+        </div>
+      </div>
+      <div class="portfolio-card">
+        <div class="card-thumb">
+          <div class="card-halftone"></div>
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z"/></svg>
+          </div>
+        </div>
+        <div class="card-info">
+          <div class="card-game">Project Title</div>
+          <div class="card-meta">Indie &nbsp;·&nbsp; 2023</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <div class="section" id="about">
+    <div class="section-tag">// about</div>
+    <div class="section-title">THE TEAM</div>
+
+    <div class="profile-main">
+      <div>
+        <div class="avatar-frame">
+          <div class="avatar-halftone"></div>
+          <div class="avatar-corner act"></div>
+          <div class="avatar-corner acb"></div>
+          <div class="avatar-initials">CU</div>
+        </div>
+        <div class="availability-dot">
+          <div class="dot"></div>
+          <span class="dot-label">Available</span>
+        </div>
+      </div>
+      <div>
+        <div class="profile-name">CHRISTIAN ULVNE</div>
+        <div class="profile-role">Composer &nbsp;·&nbsp; Video Game Music &nbsp;·&nbsp; Sweden</div>
+        <div class="profile-bio">
+          <p>Christian Ulvne is a Swedish video game music composer with a sound built from dark cinematic tension, anime-inspired intensity, and the relentless drive of manga action sequences.</p>
+          <p>Currently scoring the full original soundtrack for <strong>Godslayer</strong> — a black &amp; white action series that demands music as sharp and heavy as its blade work. His compositions sit at the intersection of orchestral weight and electronic edge.</p>
+          <p>Available for game projects that need music with <strong>weight, darkness, and intent</strong>. If your game has a soul, Christian will find its sound.</p>
+        </div>
+        <div class="stat-grid">
+          <div class="stat-cell">
+            <div class="stat-label">Based in</div>
+            <div class="stat-value">Sweden</div>
+          </div>
+          <div class="stat-cell">
+            <div class="stat-label">Status</div>
+            <div class="stat-value green">Available</div>
+          </div>
+          <div class="stat-cell">
+            <div class="stat-label">Current project</div>
+            <div class="stat-value">Godslayer OST</div>
+          </div>
+          <div class="stat-cell">
+            <div class="stat-label">Speciality</div>
+            <div class="stat-value">Game OST</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="profile-divider" style="padding:0 0 40px;">
+      <div class="divider-line-h"></div>
+      <div class="divider-tag">// biz dev</div>
+      <div class="divider-line-h"></div>
+    </div>
+
+    <div class="profile-secondary">
+      <div>
+        <div class="secondary-name">MARCUS ULVNE</div>
+        <div class="secondary-role">CEO, Mod Collective &nbsp;·&nbsp; Biz Dev, Super Ulvne Bros</div>
+        <div class="secondary-bio">
+          Marcus Ulvne is the business brain behind <strong>Super Ulvne Bros Music</strong>. As CEO of <strong>Mod Collective</strong>, he brings commercial strategy, deal-making, and industry connections to the table — making sure Christian's music finds the games it deserves to score.
+          <br><br>
+          If you're a studio, publisher, or developer looking to license or commission music, Marcus is your first point of contact.
+        </div>
+        <span class="tag-pill">Mod Collective</span>
+        <span class="tag-pill green">Open to deals</span>
+      </div>
+      <div class="secondary-avatar">
+        <div class="secondary-avatar-ht"></div>
+        <div class="secondary-initials">MU</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTACT -->
+  <div class="contact-bar" id="contact">
+    <div class="contact-line"></div>
+    <div class="contact-cta">READY TO BUILD SOMETHING?</div>
+    <a class="contact-btn" href="mailto:hello@superulvnebros.com">Get in touch</a>
+  </div>
+
+  <footer>
+    <p>&copy; 2026 Super Ulvne Bros &nbsp;·&nbsp; Sweden</p>
+  </footer>
+
+</body>
+</html>
